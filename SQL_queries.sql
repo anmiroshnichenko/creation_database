@@ -3,12 +3,34 @@ CREATE ROLE
 sudo -u postgres psql -c "CREATE DATABASE music_service  WITH OWNER test;"
 CREATE DATABASE
 
--- один ко многим
+
+	CREATE TABLE IF NOT EXISTS genres (
+	id SERIAL PRIMARY KEY,
+	title VARCHAR(60) NOT NULL	
+);
+
+CREATE TABLE IF NOT EXISTS artists (
+	id SERIAL PRIMARY KEY,
+	name  VARCHAR(60) NOT NULL	
+); 
+
+CREATE TABLE IF NOT EXISTS genres_artists (
+	id SERIAL PRIMARY KEY,
+	genres_id  INTEGER NOT NULL REFERENCES genres(id),
+	artists_id INTEGER NOT NULL REFERENCES artists(id)
+);
+
 
 CREATE TABLE IF NOT EXISTS albums  (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(60) NOT NULL,
 	year_of_release  DATE
+);
+
+CREATE TABLE IF NOT EXISTS artists_albums  (
+	id SERIAL PRIMARY KEY,
+	artists_id  INTEGER NOT NULL REFERENCES artists(id),
+	albums_id INTEGER NOT NULL REFERENCES albums(id)
 );
 
 CREATE TABLE IF NOT EXISTS tracks (
@@ -19,6 +41,17 @@ CREATE TABLE IF NOT EXISTS tracks (
 	duration  TIME
 );
 
+CREATE TABLE IF NOT EXISTS tracklists  (
+	id SERIAL PRIMARY KEY,
+	title VARCHAR(60) NOT NULL,
+	year_of_release  DATE
+);
 
-select * from albums;
-select * from tracks;
+CREATE TABLE IF NOT EXISTS tracks_tracklists  (
+	id SERIAL PRIMARY KEY,
+	tracks_id  INTEGER NOT NULL REFERENCES tracks(id),
+	tracklists_id INTEGER NOT NULL REFERENCES tracklists(id)
+);
+
+
+
